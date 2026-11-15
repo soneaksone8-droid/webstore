@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ຮ້ານພວງກະແຈລົດ</title>
+<meta name="description" content="ພວງກະແຈລົດທຸກຍີ່ຫໍ້ ສັ່ງງ່າຍ ເກັບເງິນປາຍທາງ ສົ່ງທົ່ວລາວ">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f3ef;--card:#fff;--ink:#14181d;--mute:#6a717a;--line:#e4e0d9;--pri:#ff5a1f;--onpri:#fff;--ok:#1a7f4b;--err:#c0301f;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1114;--card:#181c21;--ink:#eceff2;--mute:#98a1ab;--line:#2a3038;--pri:#ff7a45;--onpri:#1a0a02;--ok:#4cc88a;--err:#ff8a7a;color-scheme:dark}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Noto Sans Lao",system-ui,sans-serif;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+button,input,select,textarea{font:inherit;color:inherit}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(8px + env(safe-area-inset-top)) 14px 8px;border-bottom:1px solid var(--line)}
+.wrap{max-width:720px;margin:0 auto}
+.top{display:flex;align-items:center;gap:10px}.logo{font-weight:800;font-size:1.15rem;white-space:nowrap}.logo b{color:var(--pri)}
+#q{flex:1;min-width:0;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:9px 16px;min-height:44px}
+main{max-width:720px;margin:0 auto;padding:0 14px}
+.hero{margin:14px 0;border-radius:22px;padding:22px 20px;color:#fff;background:radial-gradient(120% 140% at 100% 0,#ff5a1f55 0,transparent 55%),linear-gradient(135deg,#14181d,#2b3340)}
+.hero h1{margin:0 0 6px;font-size:1.55rem;line-height:1.3;font-weight:800}.hero p{margin:0 0 12px;opacity:.85}
+.perks{display:flex;flex-wrap:wrap;gap:6px}.perks span{background:#ffffff1f;border-radius:999px;padding:3px 12px;font-size:.84rem}
+h2{font-size:1.1rem;margin:22px 0 10px;display:flex;justify-content:space-between;align-items:baseline}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none}.chip{flex:none;min-height:44px;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:0 18px;font-weight:600;cursor:pointer}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border-radius:18px;overflow:hidden;border:1px solid var(--line);display:flex;flex-direction:column;position:relative}
+.ph{aspect-ratio:1;background:var(--line);display:grid;place-items:center;font-size:3rem;position:relative;cursor:pointer}.ph img{width:100%;height:100%;object-fit:cover}
+.tag{position:absolute;top:8px;left:8px;background:var(--pri);color:var(--onpri);font-weight:800;font-size:.78rem;border-radius:8px;padding:1px 8px}
+.sold{position:absolute;inset:0;background:#000a;color:#fff;display:grid;place-items:center;font-weight:800}
+.cb{padding:10px 12px 12px;display:flex;flex-direction:column;gap:2px;flex:1}.nm{font-weight:600;line-height:1.35;cursor:pointer}.br{color:var(--mute);font-size:.82rem}
+.pr{font-weight:800;font-size:1.05rem}.old{color:var(--mute);font-size:.8rem;text-decoration:line-through;font-weight:400;margin-left:6px}.low{color:var(--err);font-size:.8rem;font-weight:600}
+.add{margin-top:8px;min-height:44px;border:0;border-radius:12px;background:var(--pri);color:var(--onpri);font-weight:800;cursor:pointer}.add:disabled{background:var(--line);color:var(--mute)}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;min-height:62px;border:0;background:none;color:var(--mute);font-size:.8rem;cursor:pointer;position:relative}nav button.on{color:var(--pri);font-weight:800}nav i{display:block;font-style:normal;font-size:1.35rem;line-height:1.2}
+nav em{position:absolute;top:6px;left:calc(50% + 6px);background:var(--pri);color:var(--onpri);font-style:normal;font-size:.72rem;font-weight:800;border-radius:99px;min-width:20px;padding:0 5px}
+.ov{position:fixed;inset:0;background:#0009;z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--bg);width:100%;max-width:640px;max-height:94vh;overflow:auto;border-radius:22px 22px 0 0;padding:16px 16px calc(24px + env(safe-area-inset-bottom));position:relative}
+.sh{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:1.1rem}.x{border:0;background:none;font-size:2rem;line-height:1;cursor:pointer;min-width:44px;min-height:44px}
+.gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:8px;margin:10px 0;border-radius:16px}.gal>*{flex:0 0 100%;scroll-snap-align:center;aspect-ratio:1;object-fit:cover;background:var(--line);border-radius:16px;display:grid;place-items:center;font-size:4rem}
+.btn{width:100%;min-height:52px;border:0;border-radius:14px;background:var(--pri);color:var(--onpri);font-weight:800;cursor:pointer;margin-top:12px;font-size:1.02rem}.btn.alt{background:var(--card);color:var(--ink);border:1px solid var(--line)}.btn:disabled{opacity:.6}
+label{display:block;font-size:.85rem;color:var(--mute);margin-top:12px}
+input,select,textarea{width:100%;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:11px 12px;min-height:48px}
+.opt{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 12px;margin-top:8px;color:var(--ink);font-size:1rem;cursor:pointer}.opt input{width:22px;min-height:22px}.opt.on{border-color:var(--pri);outline:1px solid var(--pri)}
+.ln{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.ln img,.ln .t{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--line);flex:none;display:grid;place-items:center}
+.q{display:flex;align-items:center;gap:6px}.q button{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:1.2rem;cursor:pointer}
+.sum div{display:flex;justify-content:space-between;padding:3px 0}.sum .tot{font-weight:800;font-size:1.2rem;border-top:1px solid var(--line);margin-top:6px;padding-top:8px}
+.note{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:12px}.mute{color:var(--mute);font-size:.9rem}
+.steps{display:flex;margin:14px 0}.steps div{flex:1;text-align:center;font-size:.78rem;color:var(--mute);position:relative}.steps b{display:block;width:26px;height:26px;margin:0 auto 4px;border-radius:50%;background:var(--line);line-height:26px;color:var(--mute)}.steps .on{color:var(--ink);font-weight:600}.steps .on b{background:var(--ok);color:#fff}
+.sk{height:210px;border-radius:18px;background:linear-gradient(90deg,var(--line),var(--card),var(--line));background-size:200% 100%;animation:s 1.3s infinite}@keyframes s{to{background-position:-200% 0}}
+.wa{position:fixed;right:14px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:6;background:#25d366;color:#fff;border-radius:999px;padding:10px 16px;font-weight:800;text-decoration:none;box-shadow:0 4px 14px #0004}
+.toast{position:fixed;left:14px;right:14px;bottom:calc(88px + env(safe-area-inset-bottom));z-index:50;background:var(--ink);color:var(--bg);border-radius:14px;padding:12px;text-align:center}.toast.err{background:var(--err);color:#fff}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.sk{animation:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap top"><div class="logo" id="logo">ຮ້ານ<b>ພວງກະແຈ</b></div><input id="q" type="search" placeholder="ຄົ້ນຫາ ຍີ່ຫໍ້ ຫຼື ຊື່ສິນຄ້າ" aria-label="ຄົ້ນຫາ"></div></header>
+<main id="main"><div class="grid" style="margin-top:14px"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></main>
+<nav id="nav"></nav><div id="ov"></div><div id="toast"></div><div id="wa"></div>
+<script>
+const API = "https://script.google.com/macros/s/AKfycbyV5Dn9kcf12MxgO0s_6_awvwjqeTQZB57SGYccX4i2sjuThQI8Kcm5pKUwB3roLLfw/exec";        // ← ວາງລີ້ງ /exec ຂອງລະບົບຫຼັງບ້ານ
+const PIXEL_ID = "";   // ← Facebook Pixel ID (ບໍ່ບັງຄັບ)
+const PROV = ["ນະຄອນຫຼວງວຽງຈັນ","ຜົ້ງສາລີ","ຫຼວງນ້ຳທາ","ອຸດົມໄຊ","ບໍ່ແກ້ວ","ຫຼວງພະບາງ","ຫົວພັນ","ໄຊຍະບູລີ","ຊຽງຂວາງ","ວຽງຈັນ","ບໍລິຄຳໄຊ","ຄຳມ່ວນ","ສະຫວັນນະເຂດ","ສາລະວັນ","ເຊກອງ","ຈຳປາສັກ","ອັດຕະປື","ໄຊສົມບູນ"];
+const STEP = [['new','ຮັບອໍເດີ'],['confirmed','ຢືນຢັນ'],['packed','ແພັກ'],['shipped','ກຳລັງສົ່ງ'],['done','ສຳເລັດ']];
+const $ = s => document.querySelector(s);
+const e = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => (+n || 0).toLocaleString('en-US') + ' ກີບ';
+const img = u => /^https:\/\/drive\.google\.com\//.test(u || '') ? u : '';
+const ls = (k, v) => { try { if (v === undefined) return JSON.parse(localStorage.getItem(k) || 'null'); localStorage.setItem(k, JSON.stringify(v)); } catch (_) { return null; } };
+let C = null, cart = ls('cart') || {}, V = 'home', brand = '', q = '', F = Object.assign({name:'', phone:'', address:'', province:'', carrier:'', payment:'cod', note:''}, ls('prof') || {}), OK = null;
+
+if (PIXEL_ID) { !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); }; n.queue = []; n.loaded = !0; n.version = '2.0'; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s); }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js'); fbq('init', PIXEL_ID); fbq('track', 'PageView'); }
+const px = (n, d) => { try { window.fbq && fbq('track', n, d); } catch (_) {} };
+
+async function api(a, p = {}) {
+  if (!API) throw new Error('ຍັງບໍ່ໄດ້ຕັ້ງລີ້ງລະບົບ (API)');
+  const r = await fetch(API, {method:'POST', body:JSON.stringify(Object.assign({action:a}, p))});
+  const j = await r.json(); if (!j.ok) throw new Error(j.error || 'ເກີດຂໍ້ຜິດພາດ'); return j;
+}
+function toast(m, err) { const t = $('#toast'); t.innerHTML = '<div class="toast' + (err ? ' err' : '') + '">' + e(m) + '</div>'; clearTimeout(toast.t); toast.t = setTimeout(() => t.innerHTML = '', 3000); }
+const P = id => C && C.products.find(p => p.id === id);
+const count = () => Object.values(cart).reduce((a, b) => a + b, 0);
+const sub = () => Object.keys(cart).reduce((s, id) => s + (P(id) ? P(id).price * cart[id] : 0), 0);
+const fee = () => { const c = C && C.carriers.find(x => x.name === F.carrier); return c ? c.fee : 0; };
+
+async function init() {
+  try {
+    C = await api('catalog'); document.title = C.shop.name || document.title; $('#logo').textContent = C.shop.name || 'ຮ້ານ';
+    Object.keys(cart).forEach(id => { if (!P(id) || P(id).stock <= 0) delete cart[id]; else cart[id] = Math.min(cart[id], P(id).stock); }); ls('cart', cart);
+    if (!C.carriers.some(c => c.name === F.carrier)) F.carrier = C.carriers[0] ? C.carriers[0].name : '';
+    const w = String(C.shop.whatsapp || '').replace(/\D/g, ''); $('#wa').innerHTML = w ? `<a class="wa" target="_blank" rel="noopener" href="https://wa.me/${w}">💬 ສອບຖາມ</a>` : '';
+    render(); const m = location.hash.match(/^#p-(\w+)$/); if (m && P(m[1])) openProd(m[1]);
+  } catch (x) { $('#main').innerHTML = `<div class="note">ໂຫຼດຂໍ້ມູນບໍ່ໄດ້: ${e(x.message)}<button class="btn" onclick="init()">ລອງໃໝ່</button></div>`; }
+}
+function card(p) {
+  const im = img(p.images[0]), off = p.old_price ? Math.round((1 - p.price / p.old_price) * 100) : 0;
+  return `<div class="card"><div class="ph" data-a="prod" data-v="${e(p.id)}">${im ? `<img src="${e(im)}" alt="${e(p.name)}" loading="lazy">` : '🔑'}${off ? `<span class="tag">-${off}%</span>` : ''}${p.stock <= 0 ? '<div class="sold">ໝົດ</div>' : ''}</div>
+<div class="cb"><div class="nm" data-a="prod" data-v="${e(p.id)}">${e(p.name)}</div><div class="br">${e(p.brand)}</div><div class="pr">${money(p.price)}${p.old_price ? `<span class="old">${money(p.old_price)}</span>` : ''}</div>${p.stock > 0 && p.stock <= 5 ? `<div class="low">ເຫຼືອ ${p.stock} ຊິ້ນ</div>` : ''}
+<button class="add" data-a="add" data-v="${e(p.id)}" ${p.stock <= 0 ? 'disabled' : ''}>${p.stock <= 0 ? 'ສິນຄ້າໝົດ' : '+ ໃສ່ກະຕ່າ'}</button></div></div>`;
+}
+function render() {
+  const n = count();
+  $('#nav').innerHTML = [['home','🏠','ໜ້າຫຼັກ'],['cart','🛒','ກະຕ່າ'],['track','📦','ຕິດຕາມອໍເດີ']].map(t => `<button class="${V === t[0] ? 'on' : ''}" data-a="nav" data-v="${t[0]}"><i>${t[1]}</i>${t[2]}${t[0] === 'cart' && n ? `<em>${n}</em>` : ''}</button>`).join('');
+  if (V === 'track') return trackView();
+  if (!C) return;
+  const act = brand || q, qq = q.toLowerCase(), list = C.products.filter(p => (!brand || p.brand === brand) && (!qq || (p.name + ' ' + p.brand).toLowerCase().includes(qq)));
+  const brands = [...new Set(C.brands.map(b => b.brand))];
+  let h = act ? '' : `<section class="hero"><h1>ພວງກະແຈລົດ ທຸກຍີ່ຫໍ້</h1><p>ເລືອກຍີ່ຫໍ້ລົດຂອງທ່ານ ສັ່ງງ່າຍໃນໜ້າດຽວ</p><div class="perks"><span>ເກັບເງິນປາຍທາງ</span><span>ສົ່ງທົ່ວລາວ</span><span>ໂອນຜ່ານ QR</span></div></section>`;
+  h += `<h2>ເລືອກຍີ່ຫໍ້ລົດຂອງທ່ານ</h2><div class="chips"><button class="chip ${brand ? '' : 'on'}" data-a="brand" data-v="">ທັງໝົດ</button>${brands.map(b => `<button class="chip ${brand === b ? 'on' : ''}" data-a="brand" data-v="${e(b)}">${e(b)}</button>`).join('')}</div>`;
+  const sec = (t, l) => l.length ? `<h2>${t}</h2><div class="grid">${l.map(card).join('')}</div>` : '';
+  if (act) h += sec(brand ? e(brand) + ' (' + list.length + ')' : 'ຜົນຄົ້ນຫາ', list) + (list.length ? '' : '<div class="note mute">ບໍ່ພົບສິນຄ້າ ລອງຄຳຄົ້ນຫາອື່ນ</div>');
+  else h += sec('🔥 ຂາຍດີ', list.filter(p => p.best)) + sec('🏷️ ຫຼຸດລາຄາ', list.filter(p => p.old_price)) + sec('ສິນຄ້າທັງໝົດ', list) + (list.length ? '' : '<div class="note mute">ຮ້ານກຳລັງກຽມສິນຄ້າ ກະລຸນາກັບມາໃໝ່</div>');
+  $('#main').innerHTML = h;
+}
+function sheet(h) { $('#ov').innerHTML = h ? `<div class="ov" data-a="bg"><div class="sheet"><div class="sh"><span></span><button class="x" data-a="close" aria-label="ປິດ">×</button></div>${h}</div></div>` : ''; }
+function closeAll() { sheet(''); history.replaceState(null, '', location.pathname + location.search); }
+function openProd(id) {
+  const p = P(id); if (!p) return; px('ViewContent', {content_ids:[id], value:p.price, currency:'LAK'}); history.replaceState(null, '', '#p-' + id);
+  const ims = p.images.map(img).filter(Boolean);
+  sheet(`<div class="gal">${ims.length ? ims.map(u => `<img src="${e(u)}" alt="${e(p.name)}">`).join('') : '<div>🔑</div>'}</div><div class="br">${e(p.brand)}</div><div style="font-size:1.25rem;font-weight:800">${e(p.name)}</div>
+<div class="pr" style="font-size:1.4rem;color:var(--pri)">${money(p.price)}${p.old_price ? `<span class="old">${money(p.old_price)}</span>` : ''}</div>${p.stock > 0 && p.stock <= 5 ? `<div class="low">ເຫຼືອ ${p.stock} ຊິ້ນ</div>` : ''}
+${p.desc ? `<p style="white-space:pre-wrap">${e(p.desc)}</p>` : ''}<button class="btn" data-a="add" data-v="${e(id)}" data-go="1" ${p.stock <= 0 ? 'disabled' : ''}>${p.stock <= 0 ? 'ສິນຄ້າໝົດ' : 'ສັ່ງຊື້ເລີຍ'}</button><button class="btn alt" data-a="add" data-v="${e(id)}" ${p.stock <= 0 ? 'disabled' : ''}>ໃສ່ກະຕ່າ</button><button class="btn alt" data-a="share" data-v="${e(id)}">ແຊຣ໌ລີ້ງສິນຄ້ານີ້</button>`);
+}
+function addCart(id, go) {
+  const p = P(id); if (!p || p.stock <= 0) return;
+  cart[id] = Math.min((cart[id] || 0) + 1, p.stock, 10); ls('cart', cart); px('AddToCart', {content_ids:[id], value:p.price, currency:'LAK'});
+  if (go) { openCart(); } else toast('ເພີ່ມໃສ່ກະຕ່າແລ້ວ'); render();
+}
+function openCart() {
+  const ids = Object.keys(cart).filter(P);
+  if (!ids.length) return sheet('<div class="note mute" style="text-align:center;margin-top:20px">ກະຕ່າຍັງວ່າງ</div><button class="btn" data-a="close">ເລືອກສິນຄ້າ</button>');
+  const cs = C.carriers, s = sub(), f = fee();
+  sheet(`<div class="sh" style="margin-top:-30px">ກະຕ່າຂອງທ່ານ</div>${ids.map(id => { const p = P(id), im = img(p.images[0]); return `<div class="ln">${im ? `<img src="${e(im)}" alt="">` : '<div class="t">🔑</div>'}<div style="flex:1"><div>${e(p.name)}</div><div class="mute">${money(p.price)}</div></div><div class="q"><button data-a="dec" data-v="${e(id)}" aria-label="ຫຼຸດ">−</button><b>${cart[id]}</b><button data-a="inc" data-v="${e(id)}" aria-label="ເພີ່ມ">+</button></div></div>`; }).join('')}
+<h2 style="margin-bottom:0">ຂໍ້ມູນຈັດສົ່ງ</h2>
+<label for="f_name">ຊື່</label><input id="f_name" data-f="name" autocomplete="name" value="${e(F.name)}">
+<label for="f_phone">ເບີໂທ</label><input id="f_phone" data-f="phone" type="tel" inputmode="tel" autocomplete="tel" value="${e(F.phone)}">
+<label for="f_province">ແຂວງ</label><select id="f_province" data-f="province"><option value="">ເລືອກແຂວງ</option>${PROV.map(x => `<option ${F.province === x ? 'selected' : ''}>${x}</option>`).join('')}</select>
+<label for="f_address">ບ້ານ, ເມືອງ (ລະບຸໃຫ້ຊັດ)</label><textarea id="f_address" data-f="address" rows="2" autocomplete="street-address">${e(F.address)}</textarea>
+<input id="hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;min-height:0">
+<label>ຂົນສົ່ງ</label>${cs.map(c => `<label class="opt ${F.carrier === c.name ? 'on' : ''}"><input type="radio" name="car" data-f="carrier" value="${e(c.name)}" ${F.carrier === c.name ? 'checked' : ''}><span style="flex:1">${e(c.name)}</span><b>${c.fee ? money(c.fee) : 'ຟຣີ'}</b></label>`).join('')}
+<label>ວິທີຈ່າຍ</label><label class="opt ${F.payment === 'cod' ? 'on' : ''}"><input type="radio" name="pay" data-f="payment" value="cod" ${F.payment === 'cod' ? 'checked' : ''}>ເກັບເງິນປາຍທາງ (COD)</label><label class="opt ${F.payment === 'transfer' ? 'on' : ''}"><input type="radio" name="pay" data-f="payment" value="transfer" ${F.payment === 'transfer' ? 'checked' : ''}>ໂອນເງິນ (QR) ແລ້ວແນບສະລິບ</label>
+<label for="f_note">ໝາຍເຫດ (ບໍ່ບັງຄັບ)</label><input id="f_note" data-f="note" value="${e(F.note)}">
+<div class="note sum"><div><span>ສິນຄ້າ</span><span>${money(s)}</span></div><div><span>ຄ່າສົ່ງ</span><span>${f ? money(f) : 'ຟຣີ'}</span></div><div class="tot"><span>ລວມທັງໝົດ</span><span>${money(s + f)}</span></div></div>
+<button class="btn" data-a="order">ຢືນຢັນສັ່ງຊື້ · ${money(s + f)}</button>`);
+}
+async function order(b) {
+  if (F.name.trim().length < 2 || F.phone.replace(/\D/g, '').length < 8 || F.address.trim().length < 6 || !F.province || !F.carrier) return toast('ກະລຸນາໃສ່ຊື່, ເບີໂທ, ແຂວງ ແລະ ທີ່ຢູ່ໃຫ້ຄົບ', 1);
+  b.disabled = true;
+  try {
+    const r = await api('placeOrder', Object.assign({}, F, {address: F.address + ' (' + F.province + ')', items: Object.keys(cart).map(id => ({id, qty:cart[id]})), hp: $('#hp') ? $('#hp').value : ''}));
+    ls('prof', F); ls('last', {id:r.order_id, phone:F.phone}); px('Purchase', {value:r.total, currency:'LAK'});
+    cart = {}; ls('cart', cart); OK = r; render(); okView();
+    api('catalog').then(c => { C = c; render(); }).catch(() => {});
+  } catch (x) { toast(x.message, 1); } finally { b.disabled = false; }
+}
+function okView() {
+  const r = OK, tr = r.payment === 'transfer';
+  sheet(`<div style="text-align:center;margin-top:-10px"><div style="font-size:3rem">✅</div><div style="font-weight:800;font-size:1.25rem">ສັ່ງຊື້ສຳເລັດ</div><div class="mute">ເລກອໍເດີ</div><div style="font-size:1.4rem;font-weight:800;color:var(--pri)">${e(r.order_id)}</div><div class="mute">ຈື່ເລກນີ້ໄວ້ ໃຊ້ຕິດຕາມອໍເດີ (ກັບເບີໂທທີ່ສັ່ງ)</div></div>
+${tr ? `<div class="note"><b>ໂອນເງິນ ${money(r.total)}</b>${r.bank_qr ? `<div style="text-align:center;margin:10px 0"><img src="${e(img(r.bank_qr))}" alt="QR" style="width:100%;max-width:260px;border-radius:12px"></div><div class="mute" style="text-align:center">ກົດຄ້າງຮູບ ເພື່ອບັນທຶກ ແລ້ວສະແກນຈາກແອັບທະນາຄານ</div>` : ''}<div style="white-space:pre-wrap;margin-top:8px">${e(r.bank)}</div><button class="btn alt" data-a="copybank">ຄັດລອກເລກບັນຊີ</button>
+<label class="btn" style="display:grid;place-items:center;cursor:pointer">ແນບສະລິບໂອນເງິນ<input type="file" id="slip" accept="image/*" hidden></label><div class="mute">ຮ້ານຈະກວດຍອດເຂົ້າບັນຊີກ່ອນຢືນຢັນອໍເດີ</div></div>` : '<div class="note">ທີມງານຈະຢືນຢັນອໍເດີ ແລ້ວແພັກສິນຄ້າໃຫ້ ຈ່າຍເງິນເມື່ອຮັບເຄື່ອງ ' + money(r.total) + '</div>'}
+<button class="btn alt" data-a="gotrack">ຕິດຕາມອໍເດີ</button>`);
+}
+function trackView(res, err) {
+  const last = ls('last') || {}, i = res ? STEP.findIndex(s => s[0] === res.status) : -1, bad = res && (res.status === 'cancelled' || res.status === 'noshow');
+  $('#main').innerHTML = `<h2 style="margin-top:18px">ຕິດຕາມອໍເດີ</h2><label for="t_id">ເລກອໍເດີ</label><input id="t_id" value="${e(last.id || '')}" placeholder="K261115-0001"><label for="t_ph">ເບີໂທທີ່ໃຊ້ສັ່ງ</label><input id="t_ph" type="tel" value="${e(last.phone || F.phone || '')}"><button class="btn" data-a="track">ກວດສະຖານະ</button>` +
+    (err ? `<div class="note" style="color:var(--err)">${e(err)}</div>` : '') +
+    (res ? `<div class="note"><b>${e(res.order_id)}</b> · ${money(res.total)}${bad ? `<div style="color:var(--err);font-weight:800;margin-top:8px">ອໍເດີນີ້ຖືກຍົກເລີກ</div>` : `<div class="steps">${STEP.map((s, k) => `<div class="${k <= i ? 'on' : ''}"><b>${k <= i ? '✓' : k + 1}</b>${s[1]}</div>`).join('')}</div>`}${res.items.map(x => `<div class="mute">${e(x.name)} × ${x.qty}</div>`).join('')}</div>` : '');
+}
+document.addEventListener('click', async ev => {
+  const t = ev.target.closest('[data-a]'); if (!t) return; const a = t.dataset.a, v = t.dataset.v;
+  if (a === 'bg') { if (ev.target === t) closeAll(); return; }
+  if (a === 'close') return closeAll();
+  if (a === 'nav') { closeAll(); if (v === 'cart') { V = 'home'; render(); return openCart(); } V = v; return render(); }
+  if (a === 'brand') { brand = v; V = 'home'; render(); return window.scrollTo({top:0}); }
+  if (a === 'prod') return openProd(v);
+  if (a === 'add') { addCart(v, !!t.dataset.go); if (t.dataset.go) return; return; }
+  if (a === 'inc') { const p = P(v); if (cart[v] < Math.min(p.stock, 10)) cart[v]++; else toast('ສັ່ງໄດ້ສູງສຸດ ' + Math.min(p.stock, 10) + ' ຊິ້ນ', 1); ls('cart', cart); render(); return openCart(); }
+  if (a === 'dec') { if (--cart[v] <= 0) delete cart[v]; ls('cart', cart); render(); return openCart(); }
+  if (a === 'order') return order(t);
+  if (a === 'share') { const u = location.href.split('#')[0] + '#p-' + v; try { if (navigator.share) return await navigator.share({title:P(v).name, url:u}); await navigator.clipboard.writeText(u); toast('ຄັດລອກລີ້ງແລ້ວ'); } catch (_) {} return; }
+  if (a === 'copybank') { try { await navigator.clipboard.writeText(OK.bank); toast('ຄັດລອກແລ້ວ'); } catch (_) { toast('ຄັດລອກບໍ່ໄດ້ ກະລຸນາກົດຄ້າງເພື່ອເລືອກ', 1); } return; }
+  if (a === 'gotrack') { closeAll(); V = 'track'; return render(); }
+  if (a === 'track') { t.disabled = true; try { const r = await api('trackOrder', {order_id:$('#t_id').value.trim(), phone:$('#t_ph').value}); trackView(r); } catch (x) { trackView(null, x.message); } }
+});
+document.addEventListener('input', ev => {
+  const t = ev.target;
+  if (t.id === 'q') { q = t.value.trim(); V = 'home'; render(); }
+  else if (t.dataset.f) F[t.dataset.f] = t.value;
+});
+document.addEventListener('change', async ev => {
+  const t = ev.target;
+  if (t.dataset.f && (t.type === 'radio')) { F[t.dataset.f] = t.value; openCart(); }
+  if (t.id === 'slip' && t.files[0]) {
+    toast('ກຳລັງສົ່ງສະລິບ…');
+    try {
+      const d = await new Promise((ok, no) => { const im = new Image(), u = URL.createObjectURL(t.files[0]); im.onload = () => { const k = Math.min(1, 1200 / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height); ok(c.toDataURL('image/jpeg', .85)); }; im.onerror = () => no(new Error('ອ່ານຮູບບໍ່ໄດ້')); im.src = u; });
+      await api('uploadSlip', {order_id:OK.order_id, phone:F.phone, image:d}); toast('ສົ່ງສະລິບແລ້ວ ຂອບໃຈ');
+    } catch (x) { toast(x.message, 1); }
+  }
+});
+init();
+</script>
+</body>
+</html>
