@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="lo">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>ແອດມິນຮ້ານ</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f5f3;--card:#fff;--ink:#17211e;--mute:#5d6b66;--line:#dde4e0;--pri:#0f5c4d;--onpri:#fff;--acc:#f2a900;--err:#b3261e;color-scheme:light}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1614;--card:#18221f;--ink:#e8efec;--mute:#9fb0a9;--line:#2a3833;--pri:#46c4a8;--onpri:#06231c;--err:#ff8a80;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Noto Sans Lao",system-ui,sans-serif;padding:env(safe-area-inset-top) 0 calc(76px + env(safe-area-inset-bottom))}
+h1{font-size:1.3rem;margin:16px 16px 8px}main{max-width:640px;margin:0 auto;padding:0 12px}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{width:100%;min-height:48px;border:0;border-radius:12px;background:var(--pri);color:var(--onpri);font-weight:800;cursor:pointer;margin-top:10px}
+.btn.alt{background:var(--card);color:var(--ink);border:1px solid var(--line)}.btn.bad{background:none;color:var(--err);border:1px solid var(--err)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin:10px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid .card{margin:0;text-align:left;cursor:pointer}
+.num{font-size:2rem;font-weight:800;line-height:1.1}.lbl{color:var(--mute);font-size:.88rem}
+.hot .num{color:var(--err)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;min-height:60px;background:none;border:0;color:var(--mute);font-size:.8rem;cursor:pointer}nav button.on{color:var(--pri);font-weight:800}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px}.chip{flex:none;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;cursor:pointer}.chip.on{background:var(--ink);color:var(--bg)}
+input,select,textarea{width:100%;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:11px;min-height:46px}
+label{display:block;font-size:.85rem;color:var(--mute);margin-top:10px}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.chk{display:flex;gap:8px;align-items:center;color:var(--ink)}.chk input{width:22px;min-height:22px}
+.row{display:flex;justify-content:space-between;gap:8px;align-items:center}.pill{border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:600;background:#e4e9e6;color:#17211e}
+.pill.new{background:#fde7b0;color:#5a3b00}.pill.done{background:#cdeedd;color:#0a4a2c}.pill.cancelled,.pill.noshow{background:#f8d4d0;color:#7a1710}
+.item{padding:6px 0;border-top:1px solid var(--line);font-size:.92rem}.flag{color:var(--err);font-size:.82rem}
+.thumb{width:56px;height:56px;border-radius:10px;object-fit:cover;background:var(--line);flex:none}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:30;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--bg);width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;padding:14px 14px calc(20px + env(safe-area-inset-bottom))}
+.sh{display:flex;justify-content:space-between;align-items:center}.x{background:none;border:0;font-size:1.8rem;cursor:pointer}
+.imgs{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.im{position:relative;width:76px;height:76px;border-radius:10px;border:1px solid var(--line);overflow:hidden;display:grid;place-items:center;font-size:1.8rem;cursor:pointer}
+.im img{width:100%;height:100%;object-fit:cover}.im button{position:absolute;top:0;right:0;background:rgba(0,0,0,.6);color:#fff;border:0;width:24px;height:24px}
+.toast{position:fixed;left:12px;right:12px;bottom:84px;z-index:50;background:var(--ink);color:var(--bg);border-radius:12px;padding:12px;text-align:center}.toast.err{background:var(--err);color:#fff}
+.login{max-width:380px;margin:12vh auto;padding:0 16px}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+</style>
+</head>
+<body>
+<main id="main"></main><nav id="nav"></nav><div id="ov"></div><div id="toast"></div>
+<script>
+const API_DEFAULT = ""; // ວາງລີ້ງ /exec ທີ່ນີ້ ຫຼື ໃສ່ໃນໜ້າ login ຄັ້ງທຳອິດ
+const $ = s => document.querySelector(s);
+const e = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ST = {new:'ໃໝ່',confirmed:'ຢືນຢັນແລ້ວ',packed:'ແພັກແລ້ວ',shipped:'ສົ່ງແລ້ວ',done:'ສຳເລັດ',cancelled:'ຍົກເລີກ',noshow:'ບໍ່ຮັບເຄື່ອງ'};
+const NEXT = {new:['confirmed','ຢືນຢັນອໍເດີ'],confirmed:['packed','ແພັກແລ້ວ'],packed:['shipped','ສົ່ງແລ້ວ'],shipped:['done','ລູກຄ້າຮັບແລ້ວ (ສຳເລັດ)']};
+const MSG = {new:'ໄດ້ຮັບອໍເດີແລ້ວ',confirmed:'ຢືນຢັນອໍເດີແລ້ວ',packed:'ແພັກສິນຄ້າແລ້ວ ກຳລັງສົ່ງ',shipped:'ສົ່ງສິນຄ້າແລ້ວ ກະລຸນາກຽມຮັບ',done:'ຂອບໃຈທີ່ອຸດໜູນ'};
+const money = n => (+n || 0).toLocaleString('en-US') + ' ກີບ';
+const thumb = (id, w = 200) => 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(id) + '&sz=w' + w;
+let G = {tab:'home', filter:'', q:'', open:'', dash:null, orders:[], prods:[], cat:null, bl:[], edit:null};
+
+async function api(a, p = {}) {
+  const url = localStorage.getItem('api') || API_DEFAULT;
+  const r = await fetch(url, {method:'POST', body:JSON.stringify(Object.assign({action:a, token:sessionStorage.getItem('t')}, p))});
+  const j = await r.json();
+  if (!j.ok) { if (/login ໃໝ່/.test(j.error)) logout(true); throw new Error(j.error); }
+  return j;
+}
+function toast(m, err) { const t = $('#toast'); t.innerHTML = '<div class="toast' + (err ? ' err' : '') + '">' + e(m) + '</div>'; clearTimeout(toast.t); toast.t = setTimeout(() => t.innerHTML = '', 3500); }
+function logout(silent) { sessionStorage.removeItem('t'); G.edit = null; $('#ov').innerHTML = ''; boot(); if (silent) toast('ໝົດເວລາ ກະລຸນາ login ໃໝ່', 1); }
+
+function boot() {
+  if (!sessionStorage.getItem('t')) {
+    const has = localStorage.getItem('api') || API_DEFAULT;
+    $('#nav').innerHTML = '';
+    $('#main').innerHTML = '<div class="login"><h1>ແອດມິນຮ້ານ</h1>' + (has ? '' : '<label>ລີ້ງລະບົບຫຼັງບ້ານ (/exec)<input id="u" placeholder="https://script.google.com/macros/s/.../exec"></label>') +
+      '<label>ລະຫັດຜ່ານ<input id="pw" type="password" autocomplete="current-password"></label><button class="btn" data-a="login">ເຂົ້າສູ່ລະບົບ</button></div>';
+    return;
+  }
+  load();
+}
+async function doLogin(b) {
+  const url = ($('#u') ? $('#u').value.trim() : '') || localStorage.getItem('api') || API_DEFAULT;
+  if (!/^https:\/\/script\.google\.com\/.+\/exec$/.test(url)) return toast('ລີ້ງ /exec ບໍ່ຖືກຕ້ອງ', 1);
+  localStorage.setItem('api', url); b.disabled = true;
+  try { const j = await api('login', {password:$('#pw').value}); sessionStorage.setItem('t', j.token); G.tab = 'home'; boot(); }
+  catch (x) { toast(x.message, 1); } finally { b.disabled = false; }
+}
+
+async function load(silent) {
+  try {
+    if (G.tab === 'home') G.dash = await api('dashboard');
+    if (G.tab === 'orders') { const [d, o] = await Promise.all([api('dashboard'), api('listOrders', {status:G.filter, q:G.q})]); G.dash = d; G.orders = o.items; }
+    if (G.tab === 'prods') { const [p, c] = await Promise.all([api('listProducts'), api('catalog')]); G.prods = p.items; G.cat = c; }
+    if (G.tab === 'more') { const [b, c] = await Promise.all([api('listBlacklist'), api('catalog')]); G.bl = b.items; G.cat = c; }
+    G.at = new Date(); render();
+  } catch (x) { if (!silent) toast(x.message, 1); }
+}
+function render() {
+  const d = G.dash, c = d ? d.counts : {}, T = [['home','ພາບລວມ'],['orders','ອໍເດີ'],['prods','ສິນຄ້າ'],['more','ເພີ່ມເຕີມ']];
+  $('#nav').innerHTML = T.map(t => `<button class="${G.tab === t[0] ? 'on' : ''}" data-a="tab" data-v="${t[0]}">${t[1]}${t[0] === 'orders' && c.new ? ' (' + c.new + ')' : ''}</button>`).join('');
+  let h = '';
+  if (G.tab === 'home') {
+    h = '<h1>ພາບລວມ</h1>';
+    if (d) {
+      const k = (n, l, f, hot) => `<button class="card ${hot ? 'hot' : ''}" data-a="goto" data-v="${f}"><div class="num">${n}</div><div class="lbl">${l}</div></button>`;
+      h += '<div class="grid">' + k(c.new || 0, 'ອໍເດີໃໝ່ (ລໍຢືນຢັນ)', 'new', c.new > 0) + k(c.confirmed || 0, 'ຕ້ອງແພັກ', 'confirmed', c.confirmed > 0) +
+        k((c.packed || 0) + (c.shipped || 0), 'ແພັກ/ສົ່ງແລ້ວ', 'shipped') + k(c.done || 0, 'ສຳເລັດ', 'done') +
+        k((c.cancelled || 0) + (c.noshow || 0), 'ຍົກເລີກ/ບໍ່ຮັບ', 'cancelled') + k(d.low_stock + ' / ' + d.out_of_stock, 'ໃກ້ໝົດ / ໝົດ', 'prods', d.low_stock + d.out_of_stock > 0) + '</div>' +
+        `<div class="card"><div class="lbl">ຍອດຂາຍມື້ນີ້ (ບໍ່ລວມຍົກເລີກ)</div><div class="num">${money(d.today_sales)}</div></div>` +
+        `<div class="lbl" style="text-align:center">ອັບເດດ ${G.at.toLocaleTimeString('en-GB')} · ຣີເຟຣຊເອງທຸກ 30 ວິ</div><button class="btn alt" data-a="refresh">ຣີເຟຣຊດຽວນີ້</button>`;
+    } else h += '<div class="card">ກຳລັງໂຫຼດ…</div>';
+  }
+  if (G.tab === 'orders') {
+    h = '<h1>ອໍເດີ</h1><input id="q" type="search" placeholder="ຄົ້ນຫາ ເບີໂທ ຫຼື ເລກອໍເດີ" value="' + e(G.q) + '"><div class="chips">' +
+      [['', 'ທັງໝົດ']].concat(Object.keys(ST).map(s => [s, ST[s]])).map(s => `<button class="chip ${G.filter === s[0] ? 'on' : ''}" data-a="filter" data-v="${s[0]}">${s[1]}${s[0] && c[s[0]] ? ' ' + c[s[0]] : ''}</button>`).join('') + '</div>';
+    h += G.orders.length ? G.orders.map(orderCard).join('') : '<div class="card lbl">ບໍ່ມີອໍເດີ</div>';
+  }
+  if (G.tab === 'prods') {
+    h = '<h1>ສິນຄ້າ</h1><button class="btn" data-a="add">+ ເພີ່ມສິນຄ້າ</button>' + (G.prods.length ? G.prods.map((p, i) => {
+      const im = String(p.images || '').split(',')[0], on = p.active === true || String(p.active).toUpperCase() === 'TRUE';
+      return `<div class="card row" data-a="edit" data-v="${i}" style="cursor:pointer"><div class="row" style="justify-content:flex-start"><img class="thumb" ${im ? 'src="' + thumb(im) + '"' : ''} alt=""><div><b>${e(p.name)}</b><div class="lbl">${e(p.brand)} · ${money(p.price)}</div><div class="lbl">ສະຕັອກ ${+p.stock || 0}${on ? '' : ' · ປິດຂາຍ'}${+p.stock <= 0 ? ' · ໝົດ' : ''}</div></div></div></div>`;
+    }).join('') : '<div class="card lbl">ຍັງບໍ່ມີສິນຄ້າ ກົດ + ເພື່ອເພີ່ມ</div>');
+  }
+  if (G.tab === 'more') {
+    const qr = G.cat && G.cat.shop.bank_qr;
+    h = '<h1>ເພີ່ມເຕີມ</h1><div class="card"><b>QR ບັນຊີຮັບໂອນ</b>' + (qr ? `<div style="margin-top:8px"><img src="${e(qr)}" alt="QR" style="max-width:220px;width:100%;border-radius:10px"></div>` : '<div class="lbl">ຍັງບໍ່ມີ QR</div>') +
+      '<label class="btn alt" style="display:grid;place-items:center;margin-top:10px;cursor:pointer">ອັບໂຫຼດ QR ໃໝ່<input type="file" id="fqr" accept="image/*" hidden></label>' + (qr ? '<button class="btn bad" data-a="rmqr">ລຶບ QR</button>' : '') +
+      '<div class="lbl" style="margin-top:8px">ຊື່/ເລກບັນຊີ ແກ້ໃນແຖບ Settings (bank_info) ຂອງ Google Sheet</div></div>' +
+      '<div class="card"><b>ບັນຊີດຳ (ເບີທີ່ບໍ່ຮັບເຄື່ອງ)</b>' + (G.bl.length ? G.bl.map((b, i) => `<div class="item row"><span>${e(b.phone)}<div class="lbl">${e(b.reason)}</div></span><button class="chip" data-a="bldel" data-v="${i}">ລຶບ</button></div>`).join('') : '<div class="lbl">ວ່າງ</div>') +
+      '<label>ເພີ່ມເບີ<input id="blp" type="tel"></label><button class="btn alt" data-a="bladd">ເພີ່ມເຂົ້າບັນຊີດຳ</button></div><button class="btn bad" data-a="logout">ອອກຈາກລະບົບ</button>';
+  }
+  const q = document.activeElement && document.activeElement.id === 'q';
+  $('#main').innerHTML = h; if (q) { const i = $('#q'); i.focus(); i.setSelectionRange(99, 99); }
+}
+function orderCard(o) {
+  const op = G.open === o.order_id, nx = NEXT[o.status], fl = String(o.flags || '');
+  let h = `<div class="card"><div class="row" data-a="open" data-v="${e(o.order_id)}" style="cursor:pointer"><div><b>${e(o.name)}</b> <span class="lbl">${e(o.order_id)}</span><div class="lbl">${e(String(o.created).slice(5, 16))} · ${money(o.total)} · ${o.payment === 'cod' ? 'COD' : 'ໂອນ'}</div>` +
+    (fl ? `<div class="flag">${fl.indexOf('blacklist') >= 0 ? '⚠ ບັນຊີດຳ ' : ''}${fl.indexOf('new_customer') >= 0 ? 'ລູກຄ້າໃໝ່' : ''}</div>` : '') + `</div><span class="pill ${o.status}">${ST[o.status]}</span></div>`;
+  if (op) {
+    h += (o.items || []).map(i => `<div class="item">${e(i.name)} × ${i.qty} <span style="float:right">${money(i.price * i.qty)}</span></div>`).join('') +
+      `<div class="item">ຄ່າສົ່ງ (${e(o.carrier)}) <span style="float:right">${money(o.shipping_fee)}</span></div><div class="item"><b>ລວມ ${money(o.total)}</b></div>` +
+      `<div class="item">📍 ${e(o.address)}${o.province ? ', ' + e(o.province) : ''}</div>${o.note ? `<div class="item">📝 ${e(o.note)}</div>` : ''}` +
+      `<div class="two"><a class="btn alt" style="display:grid;place-items:center;text-decoration:none" href="tel:${e(o.phone)}">ໂທ ${e(o.phone)}</a><a class="btn alt" style="display:grid;place-items:center;text-decoration:none" target="_blank" rel="noopener" href="https://wa.me/856${e(String(o.phone).replace(/^0/, ''))}">WhatsApp</a></div>` +
+      (o.slip ? `<button class="btn alt" data-a="slip" data-v="${e(o.order_id)}">ເບິ່ງສະລິບໂອນ</button>` : '') +
+      `<button class="btn alt" data-a="copy" data-v="${e(o.order_id)}">ຄັດລອກຂໍ້ຄວາມແຈ້ງລູກຄ້າ</button>` +
+      (nx ? `<button class="btn" data-a="status" data-v="${e(o.order_id)}" data-s="${nx[0]}">${nx[1]}</button>` : '') +
+      (nx ? `<div class="two"><button class="btn bad" data-a="status" data-v="${e(o.order_id)}" data-s="cancelled">ຍົກເລີກ</button><button class="btn bad" data-a="status" data-v="${e(o.order_id)}" data-s="noshow">ບໍ່ຮັບເຄື່ອງ</button></div>` : '');
+  }
+  return h + '</div>';
+}
+
+/* ---------- ສິນຄ້າ ---------- */
+function openForm(p) {
+  G.edit = Object.assign({id:'', name:'', brand:'', category:'ພວງກະແຈລົດ', price:'', promo_price:'', promo_start:'', promo_end:'', stock:'', description:'', active:true, best_seller:false}, p || {});
+  G.edit.images = String(G.edit.images || '').split(',').filter(Boolean);
+  G.edit.active = G.edit.active === true || String(G.edit.active).toUpperCase() === 'TRUE';
+  G.edit.best_seller = G.edit.best_seller === true || String(G.edit.best_seller).toUpperCase() === 'TRUE';
+  drawForm();
+}
+function drawForm() {
+  const p = G.edit, B = G.cat ? G.cat.brands : [], v = (k, x) => `id="f_${k}" value="${e(x == null ? p[k] : x)}"`;
+  $('#ov').innerHTML = `<div class="ov"><div class="sheet"><div class="sh"><b>${p.id ? 'ແກ້ໄຂສິນຄ້າ' : 'ເພີ່ມສິນຄ້າ'}</b><button class="x" data-a="close">×</button></div>
+<div class="imgs">${p.images.map((id, i) => `<div class="im"><img src="${thumb(id)}" alt=""><button data-a="rmimg" data-v="${i}">×</button></div>`).join('')}<label class="im">+<input type="file" id="fi" accept="image/*" multiple hidden></label></div>
+<label>ຊື່ສິນຄ້າ<input ${v('name')}></label>
+<div class="two"><label>ຍີ່ຫໍ້<input ${v('brand')} list="dl_b"></label><label>ປະເພດ<input ${v('category')} list="dl_c"></label></div>
+<div class="two"><label>ລາຄາ (ກີບ)<input type="number" inputmode="numeric" ${v('price')}></label><label>ລາຄາໂປຣ (ຖ້າມີ)<input type="number" inputmode="numeric" ${v('promo_price')}></label></div>
+<div class="two"><label>ໂປຣເລີ່ມ<input type="date" ${v('promo_start', String(p.promo_start).slice(0, 10))}></label><label>ໂປຣສິ້ນສຸດ<input type="date" ${v('promo_end', String(p.promo_end).slice(0, 10))}></label></div>
+<label>ສະຕັອກ<input type="number" inputmode="numeric" ${v('stock')}></label><label>ລາຍລະອຽດ<textarea id="f_description" rows="3">${e(p.description)}</textarea></label>
+<label class="chk"><input type="checkbox" id="f_active" ${p.active ? 'checked' : ''}> ເປີດຂາຍ</label><label class="chk"><input type="checkbox" id="f_best" ${p.best_seller ? 'checked' : ''}> ຂາຍດີ (ສະແດງໃນໝວດຂາຍດີ)</label>
+<datalist id="dl_b">${[...new Set(B.map(b => b.brand))].map(x => `<option value="${e(x)}">`).join('')}</datalist><datalist id="dl_c">${[...new Set(B.map(b => b.category))].map(x => `<option value="${e(x)}">`).join('')}</datalist>
+<button class="btn" data-a="saveprod">ບັນທຶກ</button></div></div>`;
+}
+function readForm() { const p = G.edit, g = k => $('#f_' + k).value; ['name','brand','category','price','promo_price','promo_start','promo_end','stock','description'].forEach(k => p[k] = g(k)); p.active = $('#f_active').checked; p.best_seller = $('#f_best').checked; }
+function shrink(file, max, type) {
+  return new Promise((ok, no) => {
+    const im = new Image(), u = URL.createObjectURL(file);
+    im.onload = () => { const k = Math.min(1, max / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.round(im.width * k); c.height = Math.round(im.height * k);
+      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height); URL.revokeObjectURL(u); ok(c.toDataURL(type, .85)); };
+    im.onerror = () => no(new Error('ອ່ານຮູບບໍ່ໄດ້')); im.src = u;
+  });
+}
+async function saveProd(b) {
+  readForm(); const p = G.edit; b.disabled = true;
+  try {
+    const out = Object.assign({}, p, {promo_end: p.promo_end ? p.promo_end + 'T23:59:59' : ''});
+    if (p.brand && p.category && !(G.cat.brands || []).some(x => x.brand === p.brand && x.category === p.category)) await api('saveBrand', {category:p.category, brand:p.brand});
+    await api('saveProduct', {product: out}); G.edit = null; $('#ov').innerHTML = ''; toast('ບັນທຶກແລ້ວ'); load();
+  } catch (x) { toast(x.message, 1); } finally { b.disabled = false; }
+}
+
+/* ---------- ເຫດການ ---------- */
+document.addEventListener('click', async ev => {
+  const t = ev.target.closest('[data-a]'); if (!t) return; const a = t.dataset.a, v = t.dataset.v;
+  try {
+    if (a === 'login') return doLogin(t);
+    if (a === 'tab') { G.tab = v; return load(); }
+    if (a === 'goto') { if (v === 'prods') G.tab = 'prods'; else { G.tab = 'orders'; G.filter = v; } return load(); }
+    if (a === 'filter') { G.filter = v; return load(); }
+    if (a === 'refresh') return load();
+    if (a === 'open') { G.open = G.open === v ? '' : v; return render(); }
+    if (a === 'status') {
+      if ((t.dataset.s === 'cancelled' || t.dataset.s === 'noshow') && !confirm(t.dataset.s === 'noshow' ? 'ບັນທຶກວ່າລູກຄ້າບໍ່ຮັບເຄື່ອງ? ເບີຈະເຂົ້າບັນຊີດຳ ແລະ ສະຕັອກຖືກຄືນ' : 'ຍົກເລີກອໍເດີນີ້? ສະຕັອກຈະຖືກຄືນ')) return;
+      t.disabled = true; await api('updateStatus', {order_id:v, status:t.dataset.s}); toast('ອັບເດດແລ້ວ'); return load();
+    }
+    if (a === 'copy') { const o = G.orders.find(x => x.order_id === v); await navigator.clipboard.writeText(`ສະບາຍດີ ${o.name} ອໍເດີ ${o.order_id} ຂອງທ່ານ${MSG[o.status] || ''} ຍອດລວມ ${money(o.total)}`); return toast('ຄັດລອກແລ້ວ'); }
+    if (a === 'slip') { const s = await api('getSlip', {order_id:v}); $('#ov').innerHTML = `<div class="ov" data-a="close" style="align-items:center"><img src="data:${e(s.mime)};base64,${s.data}" alt="slip" style="max-width:94%;max-height:88vh;border-radius:12px"></div>`; return; }
+    if (a === 'close') { G.edit = null; $('#ov').innerHTML = ''; return; }
+    if (a === 'add') return openForm();
+    if (a === 'edit') return openForm(G.prods[+v]);
+    if (a === 'rmimg') { readForm(); G.edit.images.splice(+v, 1); return drawForm(); }
+    if (a === 'saveprod') return saveProd(t);
+    if (a === 'rmqr') { if (!confirm('ລຶບ QR?')) return; await api('saveQr', {remove:true}); toast('ລຶບແລ້ວ'); return load(); }
+    if (a === 'bladd') { await api('addBlacklist', {phone:$('#blp').value, reason:'ເພີ່ມດ້ວຍມື'}); return load(); }
+    if (a === 'bldel') { if (!confirm('ລຶບເບີນີ້ອອກຈາກບັນຊີດຳ?')) return; await api('removeBlacklist', {phone:G.bl[+v].phone}); return load(); }
+    if (a === 'logout') return logout();
+  } catch (x) { toast(x.message, 1); }
+});
+document.addEventListener('change', async ev => {
+  const t = ev.target;
+  try {
+    if (t.id === 'fi') { readForm(); toast('ກຳລັງອັບໂຫຼດຮູບ…'); for (const f of t.files) { const d = await shrink(f, 800, 'image/jpeg'); G.edit.images.push((await api('uploadImage', {image:d})).file_id); } drawForm(); toast('ອັບໂຫຼດແລ້ວ'); }
+    if (t.id === 'fqr') { toast('ກຳລັງອັບໂຫຼດ…'); await api('saveQr', {image: await shrink(t.files[0], 900, 'image/png')}); toast('ອັບໂຫຼດ QR ແລ້ວ ລອງສະແກນກວດ'); load(); }
+  } catch (x) { toast(x.message, 1); }
+});
+document.addEventListener('keydown', ev => {
+  if (ev.key !== 'Enter') return;
+  if (ev.target.id === 'pw') doLogin($('.login .btn'));
+  if (ev.target.id === 'q') { G.q = ev.target.value.trim(); load(); }
+});
+setInterval(() => { if (!document.hidden && sessionStorage.getItem('t') && !G.edit && (G.tab === 'home' || G.tab === 'orders')) load(true); }, 30000);
+boot();
+</script>
+</body>
+</html>
